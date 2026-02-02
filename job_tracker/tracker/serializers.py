@@ -5,4 +5,8 @@ class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Company
-        fields=['id', 'company_name', 'company_website', 'company_location']
+        fields="__all__"
+        read_only_fields = ["id"]
+
+
+
