@@ -6,8 +6,19 @@ from rest_framework.decorators import api_view
 
 # Create your views here.
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def company(request):
+
+
+
+    if request.method=='POST':
+        serializer=CompanySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
 
     company=Company.objects.all()
     serializer=CompanySerializer(company, many=True)
