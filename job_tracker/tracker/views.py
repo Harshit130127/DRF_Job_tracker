@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 
 # Create your views here.
 
-@api_view(['GET', 'POST','PUT','DELETE'])
+@api_view(['GET', 'POST'])
 def company(request):
 
 
@@ -23,6 +23,8 @@ def company(request):
     company=Company.objects.all()
     serializer=CompanySerializer(company, many=True)
     return Response(serializer.data)
+
+
 
 
 
