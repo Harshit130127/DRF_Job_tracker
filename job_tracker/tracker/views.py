@@ -10,6 +10,13 @@ from rest_framework.decorators import api_view
 def company(request):
 
 
+    if request.method=='GET':
+
+        company=Company.objects.all()
+        serializer=CompanySerializer(company, many=True)
+        return Response(serializer.data)
+
+
 
     if request.method=='POST':
         serializer=CompanySerializer(data=request.data)
@@ -20,18 +27,25 @@ def company(request):
 
 
 
-    company=Company.objects.all()
-    serializer=CompanySerializer(company, many=True)
-    return Response(serializer.data)
-
-
-
-
-
-
-@api_view(['GET'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def company_detail(request, company_id):
-    company=Company.objects.get(id=company_id)
 
-    serializer=CompanySerializer(company)
-    return Response(serializer.data)
+    if request.method=='GET':
+        company=Company.objects.get(id=company_id)
+
+        serializer=CompanySerializer(company)
+        return Response(serializer.data)
+
+    if request.method=='PUT':
+        company=Company.objects.get(id=company_id)
+        serializer=CompanySerializer(company, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+
+    if request.method=='DELETE':
+        company=Company.objects.get(id=company_id)
+        company.delete()
+        return Response(status=204)
